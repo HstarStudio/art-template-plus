@@ -6,14 +6,11 @@
  * @return  {String, Function}  渲染好的HTML字符串或者渲染方法
  */
 var template = function (filename, content) {
-    return typeof content === 'string'
-    ?   compile(content, {
-            filename: filename
-        })
-    :   renderFile(filename, content);
+  return typeof content === 'string'
+    ? compile(content, {
+      filename: filename
+    })
+    : renderFile(filename, content);
 };
 
-
 template.version = '3.0.0';
-
-

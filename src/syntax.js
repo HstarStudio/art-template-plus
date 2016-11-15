@@ -6,132 +6,139 @@ defaults.closeTag = '}}';
 
 
 var filtered = function (js, filter) {
-    var parts = filter.split(':');
-    var name = parts.shift();
-    var args = parts.join(':') || '';
+  var parts = filter.split(':');
+  var name = parts.shift();
+  var args = parts.join(':') || '';
 
-    if (args) {
-        args = ', ' + args;
-    }
+  if (args) {
+    args = ', ' + args;
+  }
 
-    return '$helpers.' + name + '(' + js + args + ')';
+  return '$helpers.' + name + '(' + js + args + ')';
 }
 
 
 defaults.parser = function (code, options) {
 
-    // var match = code.match(/([\w\$]*)(\b.*)/);
-    // var key = match[1];
-    // var args = match[2];
-    // var split = args.split(' ');
-    // split.shift();
+  // var match = code.match(/([\w\$]*)(\b.*)/);
+  // var key = match[1];
+  // var args = match[2];
+  // var split = args.split(' ');
+  // split.shift();
 
-    code = code.replace(/^\s/, '');
+  code = code.replace(/^\s/, '');
 
-    var split = code.split(' ');
-    var key = split.shift();
-    var args = split.join(' ');
+  var split = code.split(' ');
+  var key = split.shift();
+  var args = split.join(' ');
 
-    
 
-    switch (key) {
 
-        case 'if':
+  switch (key) {
 
-            code = 'if(' + args + '){';
-            break;
+    case 'if':
 
-        case 'else':
-            
-            if (split.shift() === 'if') {
-                split = ' if(' + split.join(' ') + ')';
-            } else {
-                split = '';
-            }
+      code = 'if(' + args + '){';
+      break;
 
-            code = '}else' + split + '{';
-            break;
+    case 'else':
 
-        case '/if':
+      if (split.shift() === 'if') {
+        split = ' if(' + split.join(' ') + ')';
+      } else {
+        split = '';
+      }
 
-            code = '}';
-            break;
+      code = '}else' + split + '{';
+      break;
 
-        case 'each':
-            
-            var object = split[0] || '$data';
-            var as     = split[1] || 'as';
-            var value  = split[2] || '$value';
-            var index  = split[3] || '$index';
-            
-            var param   = value + ',' + index;
-            
-            if (as !== 'as') {
-                object = '[]';
-            }
-            
-            code =  '$each(' + object + ',function(' + param + '){';
-            break;
+    case '/if':
 
-        case '/each':
+      code = '}';
+      break;
 
-            code = '});';
-            break;
+    case 'each':
 
-        case 'echo':
+      var object = split[0] || '$data';
+      var as = split[1] || 'as';
+      var value = split[2] || '$value';
+      var index = split[3] || '$index';
 
-            code = 'print(' + args + ');';
-            break;
+      var param = value + ',' + index;
 
-        case 'print':
-        case 'include':
+      if (as !== 'as') {
+        object = '[]';
+      }
 
-            code = key + '(' + split.join(',') + ');';
-            break;
+      code = '$each(' + object + ',function(' + param + '){';
+      break;
 
-        default:
+    case '/each':
 
-            // 过滤器（辅助方法）
-            // {{value | filterA:'abcd' | filterB}}
-            // >>> $helpers.filterB($helpers.filterA(value, 'abcd'))
-            // TODO: {{ddd||aaa}} 不包含空格
-            if (/^\s*\|\s*[\w\$]/.test(args)) {
+      code = '});';
+      break;
 
-                var escape = true;
+    case 'echo':
 
-                // {{#value | link}}
-                if (code.indexOf('#') === 0) {
-                    code = code.substr(1);
-                    escape = false;
-                }
+      code = 'print(' + args + ');';
+      break;
 
-                var i = 0;
-                var array = code.split('|');
-                var len = array.length;
-                var val = array[i++];
+    case 'print':
+    case 'include':
 
-                for (; i < len; i ++) {
-                    val = filtered(val, array[i]);
-                }
+      code = key + '(' + split.join(',') + ');';
+      break;
 
-                code = (escape ? '=' : '=#') + val;
+    case 'section':
+      code = '{var tmp = $out;';
+      break;
+    case '/section':
+      code = '$out = tmp;}';
+      break;
 
-            // 即将弃用 {{helperName value}}
-            } else if (template.helpers[key]) {
-                
-                code = '=#' + key + '(' + split.join(',') + ');';
-            
-            // 内容直接输出 {{value}}
-            } else {
+    default:
 
-                code = '=' + code;
-            }
+      // 过滤器（辅助方法）
+      // {{value | filterA:'abcd' | filterB}}
+      // >>> $helpers.filterB($helpers.filterA(value, 'abcd'))
+      // TODO: {{ddd||aaa}} 不包含空格
+      if (/^\s*\|\s*[\w\$]/.test(args)) {
 
-            break;
-    }
-    
-    
-    return code;
+        var escape = true;
+
+        // {{#value | link}}
+        if (code.indexOf('#') === 0) {
+          code = code.substr(1);
+          escape = false;
+        }
+
+        var i = 0;
+        var array = code.split('|');
+        var len = array.length;
+        var val = array[i++];
+
+        for (; i < len; i++) {
+          val = filtered(val, array[i]);
+        }
+
+        code = (escape ? '=' : '=#') + val;
+
+        // 即将弃用 {{helperName value}}
+      } else if (template.helpers[key]) {
+
+        code = '=#' + key + '(' + split.join(',') + ');';
+
+        // 内容直接输出 {{value}}
+      } else {
+
+        code = '=' + code;
+      }
+
+      break;
+  }
+
+
+  return code;
 };
 
 

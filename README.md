@@ -1,3 +1,67 @@
+# art-template-plus
+
+该项目基于artTemplate-3.0.3，在此基础上为Express后端渲染做了一些增强。
+
+增加的功能有：
+
+1. Layout布局
+2. Section引入资源
+
+
+在 ``layout.html`` 中，我们可以使用 ``{{renderSection 'header'}} {{readerBody}}`` 等占位标签。
+
+页面内容如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>GGGGGGGGGGGGGGGGGGGGGGGGG</title>
+  {{renderSection 'header'}}
+</head>
+
+<body>
+  <h1>这是N个页面共同的部分！</h1>
+  {{readerBody}}
+  {{renderSection 'footer'}}
+</body>
+
+</html>
+```
+
+之后，我们就可以在一般的页面中如下使用：
+
+```html
+{{layout './public/layout'}} 
+
+{{include './public/header'}} 
+
+{{section 'header'}} 
+  <link rel="stylesheet" href="index.css">
+{{/section}}
+
+<div id="main">
+  <h3>{{title}}</h3>
+  <ul>
+    {{each list}}
+    <li><a href="{{$value.url}}">{{$value.title}}</a></li>
+    {{/each}}
+  </ul>
+</div>
+
+{{include './public/footer'}}
+
+{{section 'footer'}} 
+  <script>
+    alert('ok');
+  </script>
+{{/section}}
+```
+
+具体使用方式，模仿自 ``Asp.Net MVC Razor``
+
 # artTemplate-3.0
 
 新一代 javascript 模板引擎
