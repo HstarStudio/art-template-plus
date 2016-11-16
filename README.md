@@ -8,7 +8,7 @@
 2. Section引入资源
 
 
-在 ``layout.html`` 中，我们可以使用 ``{{renderSection 'header'}} {{readerBody}}`` 等占位标签。
+在 ``layout.html`` 中，我们可以使用 ``{{renderSection 'header'}} {{renderBody}}`` 等占位标签。
 
 页面内容如下：
 
@@ -24,7 +24,7 @@
 
 <body>
   <h1>这是N个页面共同的部分！</h1>
-  {{readerBody}}
+  {{renderBody}}
   {{renderSection 'footer'}}
 </body>
 

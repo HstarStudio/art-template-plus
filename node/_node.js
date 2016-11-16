@@ -43,7 +43,7 @@ module.exports = function (template) {
       return sectionText;
     });
     // 将partial内容装入layout页面
-    source = layoutContent.replace(/{{ *readerBody *}}/, source);
+    source = layoutContent.replace(/{{ *renderBody *}}/, source);
     return source;
   }
 
