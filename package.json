@@ -14,7 +14,7 @@
   "author": "tangbin <sugarpie.tang@gmail.com> && Jay.M.Hu <hm910705@163.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/aui/artTemplate.git"
+    "url": "git://github.com/HstarStudio/art-template-plus.git"
   },
   "main": "./node/template.js",
   "devDependencies": {
