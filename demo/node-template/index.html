@@ -1,24 +1,22 @@
-{{layout './public/layout'}} 
+[[layout './public/layout']]
+[[include './public/header']]
 
-{{include './public/header'}} 
-
-{{section 'header'}} 
-  <link rel="stylesheet" href="index.css">
-{{/section}}
+[[ section 'header' ]]
+[[ /section ]]
 
 <div id="main">
-  <h3>{{title}}</h3>
+  <h3>[[title]]</h3>
   <ul>
-    {{each list}}
-    <li><a href="{{$value.url}}">{{$value.title}}</a></li>
-    {{/each}}
+    [[each list]]
+    <li><a href="[[$value.url]]">[[$value.title]]</a></li>
+    [[/each]]
   </ul>
 </div>
 
-{{include './public/footer'}}
+[[include './public/footer']]
 
-{{section 'footer'}} 
+[[section 'footer']]
   <script>
-    alert('ok');
+   console.log('ok');
   </script>
-{{/section}}
+[[/section]]

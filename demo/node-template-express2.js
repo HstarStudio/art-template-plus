@@ -5,8 +5,8 @@ var template = require('../node/template.js');
 var app = module.exports = express();
 
 template.config('extname', '.html');
-template.config('openTag', '[[');
-template.config('closeTag', ']]');
+// template.config('openTag', '[[');
+// template.config('closeTag', ']]');
 app.engine('.html', template.__express);
 app.set('view engine', 'html');
 app.set('views', __dirname + '/node-template');
@@ -40,7 +40,7 @@ var demoData = {
 };
 
 app.get('/', function(req, res){
-  res.render('./index', demoData);
+  res.render('./index2', demoData);
 });
 
 /* istanbul ignore next */

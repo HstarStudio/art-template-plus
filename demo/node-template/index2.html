@@ -1,0 +1,22 @@
+{{ layout './public/layout2' }}
+{{include './public/header2'}}
+
+{{ section 'header' }}
+{{ /section }}
+
+<div id="main">
+  <h3>{{ title }}</h3>
+  <ul>
+    {{ each list }}
+    <li><a href="{{ $value.url }}">{{ $value.title }}</a></li>
+    {{ /each }}
+  </ul>
+</div>
+
+{{include './public/footer2'}}
+
+{{ section 'footer' }}
+  <script>
+   console.log('ok');
+  </script>
+{{ /section }}
